@@ -1,1 +1,1 @@
-Turtle parser and serializer for rdf.rb
+RDF/XML parser and serializer for rdf.rb

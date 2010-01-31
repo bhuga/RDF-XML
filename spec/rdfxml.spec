@@ -12,7 +12,7 @@ tests = {}
     test_files = Dir.glob(File.join(File.dirname(__FILE__), "tests", group.to_s, subgroup, "*.rdf"))
     test_files.each do | testfile |
       #puts "checking out #{testfile}"
-      resultfile = testfile.sub(/\.rdf$/,".nt/")
+      resultfile = testfile.sub(/\.rdf$/,".nt")
       tests[group][subgroup][testfile] = resultfile
     end
   end
@@ -80,8 +80,8 @@ describe RDF::XML do
         context "from w3c test case #{subgroup}" do
           subtests.each do | sourcefile, resultfile |
             it "should successfully parse #{File.basename(sourcefile)}" do
-              rdfxml = nil
-              lambda {rdfxml = RDF::Repository.load(sourcefile)}.should_not raise_error
+              rdfxml = RDF::Repository.load(sourcefile)
+              puts rdfxml.inspect unless rdfxml.empty?
               ntriples = RDF::Repository.load(resultfile)
               rdfxml.should have_the_same_triples_as ntriples
             end

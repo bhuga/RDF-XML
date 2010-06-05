@@ -3,25 +3,16 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 tests = {}
 [:positive_parser_tests,:negative_parser_tests,:warn_parser_tests].each do |group|
   group_dirs = Dir.glob(File.join(File.dirname(__FILE__),"tests",group.to_s, '/*')).sort
-  #puts "group dirs: #{group_dirs}"
   subgroups = group_dirs.map { | dir | File.basename(dir) }
   tests[group] = {}
   subgroups.each do | subgroup |
     tests[group][subgroup] = {}
-    #puts "checking out #{subgroup}"
     test_files = Dir.glob(File.join(File.dirname(__FILE__), "tests", group.to_s, subgroup, "*.rdf"))
     test_files.each do | testfile |
-      #puts "checking out #{testfile}"
       resultfile = testfile.sub(/\.rdf$/,".nt")
       tests[group][subgroup][testfile] = resultfile
     end
   end
-end
-
-puts "test keys: #{tests.keys}"
-
-tests.each do | group , value |
-  puts "group: #{group.class} value: #{tests[group].class}"
 end
 
 describe RDF::XML do
@@ -81,9 +72,9 @@ describe RDF::XML do
           subtests.each do | sourcefile, resultfile |
             it "should successfully parse #{File.basename(sourcefile)}" do
               rdfxml = RDF::Repository.load(sourcefile)
-              puts rdfxml.inspect unless rdfxml.empty?
+              #puts rdfxml.inspect unless rdfxml.empty?
               ntriples = RDF::Repository.load(resultfile)
-              rdfxml.should have_the_same_triples_as ntriples
+              rdfxml.should == ntriples
             end
           end
         end
